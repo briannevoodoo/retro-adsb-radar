@@ -60,6 +60,9 @@ def main():
     tracker = AircraftTracker()
     tracker.start()
 
+    last_click_time = 0
+    DOUBLE_CLICK_DELAY = 0.4
+    
     # Main Loop
     running = True
     while running:
@@ -141,15 +144,27 @@ def main():
                 running = False
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_a:
                 if audio: audio.toggle()
+            # elif event.type == pygame.MOUSEBUTTONDOWN:
+            #     mouse_pos = pygame.mouse.get_pos()
+            #     # Check for clicks on instruction text areas
+            #     if audio and audio_rect.collidepoint(mouse_pos):
+            #         audio.toggle()
+            #     elif quit_rect.collidepoint(mouse_pos):
+            #         running = False
+            #     last_mouse_move = time.time()
+            #     pygame.mouse.set_visible(True)
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                mouse_pos = pygame.mouse.get_pos()
-                # Check for clicks on instruction text areas
-                if audio and audio_rect.collidepoint(mouse_pos):
-                    audio.toggle()
-                elif quit_rect.collidepoint(mouse_pos):
+                current_time = time.time()
+                # Detect double-click anywhere
+                if (current_time - last_click_time) <= DOUBLE_CLICK_DELAY:
                     running = False
+                last_click_time = current_time
+                # Still allow single-click actions (like audio toggle)
+                mouse_pos = pygame.mouse.get_pos()
+                if audio and audio_rect and audio_rect.collidepoint(mouse_pos):
+                    audio.toggle()
                 last_mouse_move = time.time()
-                pygame.mouse.set_visible(True)
+                pygame.mouse.set_visible(True)         
             elif event.type in (pygame.MOUSEMOTION, pygame.MOUSEBUTTONUP):
                 last_mouse_move = time.time()
                 pygame.mouse.set_visible(True)
