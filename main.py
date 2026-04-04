@@ -144,10 +144,10 @@ def main():
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_pos = pygame.mouse.get_pos()
                 # Check for clicks on instruction text areas
-                # if audio and audio_rect.collidepoint(mouse_pos):
-                #     audio.toggle()
-                # elif quit_rect.collidepoint(mouse_pos):
-                #     running = False
+                if audio and audio_rect.collidepoint(mouse_pos):
+                    audio.toggle()
+                elif quit_rect.collidepoint(mouse_pos):
+                    running = False
                 last_mouse_move = time.time()
                 pygame.mouse.set_visible(True)
             elif event.type in (pygame.MOUSEMOTION, pygame.MOUSEBUTTONUP):
